@@ -1,0 +1,11 @@
+<div class="action-box-container">
+    <ul>
+        <li *ngIf="viewAction" (click)="view()">View</li>
+        <li *ngIf="editMetadataAction" (click)="editMetadata()">Edit</li>
+        <li *ngIf="manageAccessAction" (click)="manageAccess()">Manage Access</li>
+        <li *ngIf="downloadRecordAction" (click)="download()">Download</li>
+        <li *ngIf="shareRecordAction"  (click)="share()">Share</li>
+        <li *ngIf="deleteRecordAction" (click)="delete()">Delete</li>
+        <li *ngIf="cancelRecordAction" (click)="cancel()">Cancel</li>
+    </ul>
+</div>

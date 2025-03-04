@@ -1,0 +1,63 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "strictPropertyInitialization": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      //base paths
+      "@app/*": ["app/*"],
+      "@assets/*": ["assets/*"],
+      "@styles/*": ["styles/*"],
+      "@env/*": ["environments/*"],
+      // App custom paths
+      "@core/*": ["app/core/*"],
+      "@shared/*": ["app/shared/*"],
+      "@features/*": ["app/features/*"],
+      "@auth/*": ["app/auth/*"],
+      "@layout/*": ["app/layout/*"],
+      "@models/*": ["app/models/*"],
+      "@utils/*": ["app/utils/*"],
+      "@config/*": ["app/config/*"],
+      "@services/*": ["app/services/*"],
+      "@components/*": ["app/components/*"],
+      "@mock-data/*": ["app/mock-data/*"],
+      "@manage-data-access/*": ["app/main/manage-data-access/*"],
+      "@settings/*": ["app/main/settings/*"],
+      "@api/*": ["app/services/api/*"],
+      "@tokens/*": ["app/services/tokens/*"],
+      "@mocks/*": ["app/services/mocks/*"],
+      "@component/*": ["app/component/*"],
+      "@pipes/*": ["app/pipes/*"],
+      // Style custom paths
+      "@theme/*": ["styles/theme/*"]
+    }     
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

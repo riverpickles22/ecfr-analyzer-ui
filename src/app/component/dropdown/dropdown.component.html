@@ -1,0 +1,9 @@
+<!-- custom-dropdown.component.html -->
+<div class="dropdown">
+    <div class="dropdown-button" (click)="toggleDropdown()">{{ selected || 'Select item' }}</div>
+    <ul *ngIf="isOpen" class="dropdown-menu">
+        <li *ngFor="let item of items" (click)="selectItem(item)">
+            {{ item }}
+        </li>
+    </ul>
+</div>

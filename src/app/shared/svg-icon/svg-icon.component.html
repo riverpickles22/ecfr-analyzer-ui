@@ -1,0 +1,6 @@
+<div [innerHTML]="iconSvgUrl"
+     [style.--dynamic-height.em]="dynamicHeight"
+      [ngClass]="{'non-hover-svg-type': !isHovered,
+                 'hover-svg-type': isHovered,
+                 'is-selected': isActive,
+                 'default-svg-type': true}"></div>

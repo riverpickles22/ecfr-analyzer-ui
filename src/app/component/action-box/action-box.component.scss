@@ -1,0 +1,29 @@
+.action-box-container {
+  // position: absolute;
+  width: 150px;
+  z-index: 100;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+  
+ul {
+  margin: 0px;
+  padding: 5px 10px 5px 10px;
+}
+
+li {
+  cursor: pointer;
+  align-items: center;
+  text-decoration: none;
+  list-style-type: none;
+  padding: 2px 0;
+  color: #000000;
+  font-size: 14px;
+  &:hover {
+    color: #40B3D2;
+  }
+}

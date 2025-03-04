@@ -1,0 +1,31 @@
+.hover-svg-type svg,
+.non-hover-svg-type svg,
+.default-svg-type svg {
+  height: var(--dynamic-height, 1.3em);
+  cursor: var(--svg-cursor, pointer);
+}
+
+.is-selected svg {
+  fill: var(--svg-icon-color, #40B3D2);
+}
+
+.default-svg-type svg path,
+.default-svg-type svg circle,
+.default-svg-type svg rect {
+  fill: var(--svg-icon-color, #2C305F);
+  stroke: var(--svg-icon-stroke-color, none);
+}
+
+.default-svg-type:hover svg path,
+.hover-svg-type svg path,
+.hover-svg-type svg circle,
+.hover-svg-type svg g rect {
+  fill: var(--svg-icon-hover-color, #40B3D2);
+  stroke: var(--svg-icon-hover-stroke-color, none);
+}
+
+.default-svg-type .transparent-background-circle,
+.hover-svg-type .transparent-background-circle{
+  fill: var(--svg-icon-color, #2C305F);
+  fill: var(--svg-icon-transparent-color, #2C305F);;
+}

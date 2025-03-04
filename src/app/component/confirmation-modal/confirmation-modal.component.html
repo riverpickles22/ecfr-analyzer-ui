@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{ title }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+  </div>
+  <div class="modal-body">
+    <p>{{ message }}</p>
+  
+    <!-- Display dynamic details if provided -->
+    <div *ngIf="details">
+      <p *ngIf="details.recordId"><strong>Record Id#:</strong> {{ details.recordId }}</p>
+      <p *ngIf="details.clinicName"><strong>Clinic:</strong> {{ details.clinicName }}</p>
+      <p *ngIf="details.recordTypes"><strong>Records Types Requested:</strong> {{ details.recordTypes.join(', ') || 'All Available' }}</p>
+      <p *ngIf="details.recordType"><strong>Type of Record:</strong> {{ details.recordType }}</p>
+      <p *ngIf="details"><strong>Date of Visit:</strong> {{ details.dateOfVisit ? (details.dateOfVisit | date: 'MM-dd-yyyy') : 'Requesting records from all available prior visits' }}</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">{{ cancelButtonLabel }}</button>
+    <button type="button" class="btn btn-primary" (click)="onConfirm()">{{ confirmButtonLabel }}</button>
+  </div>
+  

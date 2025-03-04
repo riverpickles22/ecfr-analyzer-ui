@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="35" viewBox="0 0 36 35">
+    <circle cx="8.5" cy="8.5" r="8" fill="#fff"/>
+    <circle cx="8.5" cy="8.5" r="8" fill="#fff" transform="translate(19)" />
+    <circle cx="8.5" cy="8.5" r="8" fill="#fff" transform="translate(0 18)"/>
+    <circle cx="8.5" cy="8.5" r="8" fill="#fff" transform="translate(19 18)"/>
+</svg>

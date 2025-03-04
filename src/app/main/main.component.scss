@@ -1,0 +1,20 @@
+/* app.component.scss */
+.app-container {
+    background-color: #35336B;
+    padding: 10px;
+    display: flex;
+    flex-direction: row; /* Align children horizontally */
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .content {
+    background-color: white;
+    margin-left: 5px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-grow: 1; /* Occupy the remaining width */
+    padding: 10px;
+    min-width:900px;
+  }
+  
+  

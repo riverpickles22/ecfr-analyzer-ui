@@ -1,0 +1,12 @@
+<div class="input-group calendar-container">
+  <input class="form-control calendar-container-input" 
+         placeholder="MM-DD-YYYY"
+         name="dp"
+         [(ngModel)]="date" 
+         ngbDatepicker 
+         #d="ngbDatepicker"
+         (ngModelChange)="onDateSelect()">
+  <button class="input-group-text calendar-container-btn" (click)="d.toggle()" type="button">
+      <app-svg-icon [svgIconName]="'calendar'" [dynamicHeight]="'.8'"></app-svg-icon>
+  </button>
+</div>
