@@ -1,4 +1,4 @@
-import { ICFRReference } from "@app/models/common/cfr-reference.model";
+import { ITitleChapter } from "./titlechapter.model";
 
 export interface IAgency {
     name: string;
@@ -7,5 +7,5 @@ export interface IAgency {
     sortableName: string;
     slug: string;
     children: IAgency[];
-    ecfrReferences: ICFRReference[];
+    titleChapters: ITitleChapter[];
 }

@@ -5,7 +5,7 @@ import { Observable, catchError, tap } from 'rxjs';
 
 import { IEcfrAdminService } from './ecfr-admin.service.interface';
 import { environment } from '@env/environment';
-import { GetAgencyResponse } from '@app/models/responses/get_agency-response';
+import { GetAgencyResponse } from '@app/models/responses/get-agency-response';
 import { GetCFRReferencesResponse } from '@app/models/responses/get-record-type-response.model';
 
 @Injectable({
@@ -16,11 +16,10 @@ import { GetCFRReferencesResponse } from '@app/models/responses/get-record-type-
 export class EcfrAdminService implements IEcfrAdminService {
     apiUrl = `${environment.apiEndpoint}/ecfr/admin`;
 
-    constructor(private http: HttpClient) {}
+    constructor(private _http: HttpClient) {}
     
     getAllAgencies(): Observable<GetAgencyResponse> {
-        return this.http.get<GetAgencyResponse>(`${this.apiUrl}/agencies`)
-        .pipe(
+        return this._http.get<GetAgencyResponse>(`${this.apiUrl}/agencies`).pipe(
             catchError(error => {
                 console.error('Error fetching agencies:', error);
                 throw error;
@@ -29,8 +28,7 @@ export class EcfrAdminService implements IEcfrAdminService {
     }
 
     getCFRReferencesByShortName(agencyShortName: string): Observable<GetCFRReferencesResponse[]> {
-        return this.http.get<GetCFRReferencesResponse[]>(`${this.apiUrl}/agencies/get-cfr-references/${agencyShortName}`)
-        .pipe(
+        return this._http.get<GetCFRReferencesResponse[]>(`${this.apiUrl}/agencies/get-cfr-references/${agencyShortName}`).pipe(
             catchError(error => {
                 console.error('Error fetching CFR references:', error);
                 throw error;

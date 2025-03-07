@@ -1,1 +1,41 @@
-<p>ecfr-analyzer works!</p>
+<div class="ecfr-analyzer-container">
+  <h2>eCFR Analyzer</h2>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading">Loading agencies...</div>
+
+  <!-- Dropdown Menu -->
+  <div class="dropdown-container" *ngIf="!isLoading">
+    <label for="agencySelect" class="dropdown-label">Choose an Agency:</label>
+    <select id="agencySelect" [(ngModel)]="selectedAgencySlug" (change)="onAgencySelected(selectedAgencySlug)">
+      <option value="">-- Select an Agency --</option>
+      
+      <!-- Loop through each top-level agency -->
+      <ng-container *ngFor="let agency of agencies">
+        <!-- If agency has children, group them -->
+        <ng-container *ngIf="agency.children && agency.children.length > 0; else noChildren">
+          <optgroup [label]="agency.displayName">
+            <!-- Allow selecting the parent agency -->
+            <option [value]="agency.slug">{{ agency.displayName }}</option>
+            <!-- Loop through child agencies -->
+            <option *ngFor="let child of agency.children" [value]="child.slug">
+              - {{ child.displayName }}
+            </option>
+          </optgroup>
+        </ng-container>
+        <!-- If no children, just show the option -->
+        <ng-template #noChildren>
+          <option [value]="agency.slug">{{ agency.displayName }}</option>
+        </ng-template>
+      </ng-container>
+    </select>
+  </div>
+
+  <!-- Display the word count if available -->
+  <div class="wordcount-box" >
+    <strong>Word Count per Agency:</strong>
+    <span *ngIf="currentWordCount !== null && !calculatingWordCount">{{ currentWordCount | number }}</span>
+    <span *ngIf="currentWordCount === null && !calculatingWordCount">Select an Agency Above</span>
+    <span *ngIf="calculatingWordCount">Please be patient, calculating the word count...</span>
+  </div>
+</div>
