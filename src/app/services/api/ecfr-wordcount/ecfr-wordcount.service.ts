@@ -14,7 +14,7 @@ import { GetWordCountResponse } from '@app/models/responses/get-word-count-respo
 
 })
 export class EcfrWordCountService implements IEcfrWordCountService {
-    apiUrl = `${environment.apiEndpoint}/ecfr/wordcount`;
+    apiUrl = `${environment.apiEndpoint}/wordcount`;
 
     constructor(private _http: HttpClient) {}
     

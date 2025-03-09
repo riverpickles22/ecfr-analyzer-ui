@@ -15,7 +15,7 @@ import { GetLatestDateResponse } from '@app/models/responses/get-latest-date.mod
 
 })
 export class EcfrAdminService implements IEcfrAdminService {
-    apiUrl = `${environment.apiEndpoint}/ecfr/admin`;
+    apiUrl = `${environment.apiEndpoint}/admin`;
 
     constructor(private _http: HttpClient) {}
     

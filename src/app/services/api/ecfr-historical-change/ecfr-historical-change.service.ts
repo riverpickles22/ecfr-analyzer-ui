@@ -13,7 +13,7 @@ import { GetHistoricalChangesResponse } from '@app/models/responses/get-historic
 
 })
 export class EcfrHistoricalChangeService implements IEcfrHistoricalChangeService {
-    apiUrl = `${environment.apiEndpoint}/ecfr/historical-changes`;
+    apiUrl = `${environment.apiEndpoint}/historical-changes`;
 
     constructor(private _http: HttpClient) {}
     
