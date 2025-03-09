@@ -9,6 +9,8 @@ import { ECFR_ADMIN_SERVICE_TOKEN } from '@app/services/tokens/ecfr-admin.token'
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { EcfrWordCountService } from '@app/services/api/ecfr-wordcount/ecfr-wordcount.service';
 import { ECFR_WORDCOUNT_SERVICE_TOKEN } from './services/tokens/ecfr-wordcount.token';
+import { EcfrHistoricalChangeService } from '@app/services/api/ecfr-historical-change/ecfr-historical-change.service';
+import { ECFR_HISTORICAL_CHANGE_SERVICE_TOKEN } from './services/tokens/ecfr-historical_change.token';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +22,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: ECFR_WORDCOUNT_SERVICE_TOKEN,
       useClass: EcfrWordCountService,
+    },
+    {
+      provide: ECFR_HISTORICAL_CHANGE_SERVICE_TOKEN,
+      useClass: EcfrHistoricalChangeService,
     },
     provideRouter([
       ...MAIN_ROUTES,

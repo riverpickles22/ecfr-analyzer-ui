@@ -7,6 +7,7 @@ import { IEcfrAdminService } from './ecfr-admin.service.interface';
 import { environment } from '@env/environment';
 import { GetAgencyResponse } from '@app/models/responses/get-agency-response';
 import { GetCFRReferencesResponse } from '@app/models/responses/get-record-type-response.model';
+import { GetLatestDateResponse } from '@app/models/responses/get-latest-date.model';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +22,6 @@ export class EcfrAdminService implements IEcfrAdminService {
     getAllAgencies(): Observable<GetAgencyResponse> {
         return this._http.get<GetAgencyResponse>(`${this.apiUrl}/agencies`).pipe(
             catchError(error => {
-                console.error('Error fetching agencies:', error);
                 throw error;
             })
         );
@@ -30,7 +30,14 @@ export class EcfrAdminService implements IEcfrAdminService {
     getCFRReferencesByShortName(agencyShortName: string): Observable<GetCFRReferencesResponse[]> {
         return this._http.get<GetCFRReferencesResponse[]>(`${this.apiUrl}/agencies/get-cfr-references/${agencyShortName}`).pipe(
             catchError(error => {
-                console.error('Error fetching CFR references:', error);
+                throw error;
+            })
+        );
+    }
+
+    getLatestECFRDataDate():Observable<GetLatestDateResponse>{
+        return this._http.get<GetLatestDateResponse>(`${this.apiUrl}/latest-date`).pipe(
+            catchError(error => {
                 throw error;
             })
         );

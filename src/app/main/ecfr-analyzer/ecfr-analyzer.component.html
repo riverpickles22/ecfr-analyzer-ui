@@ -9,21 +9,15 @@
     <label for="agencySelect" class="dropdown-label">Choose an Agency:</label>
     <select id="agencySelect" [(ngModel)]="selectedAgencySlug" (change)="onAgencySelected(selectedAgencySlug)">
       <option value="">-- Select an Agency --</option>
-      
-      <!-- Loop through each top-level agency -->
       <ng-container *ngFor="let agency of agencies">
-        <!-- If agency has children, group them -->
         <ng-container *ngIf="agency.children && agency.children.length > 0; else noChildren">
           <optgroup [label]="agency.displayName">
-            <!-- Allow selecting the parent agency -->
             <option [value]="agency.slug">{{ agency.displayName }}</option>
-            <!-- Loop through child agencies -->
             <option *ngFor="let child of agency.children" [value]="child.slug">
               - {{ child.displayName }}
             </option>
           </optgroup>
         </ng-container>
-        <!-- If no children, just show the option -->
         <ng-template #noChildren>
           <option [value]="agency.slug">{{ agency.displayName }}</option>
         </ng-template>
@@ -31,11 +25,37 @@
     </select>
   </div>
 
-  <!-- Display the word count if available -->
-  <div class="wordcount-box" >
-    <strong>Word Count per Agency:</strong>
-    <span *ngIf="currentWordCount !== null && !calculatingWordCount">{{ currentWordCount | number }}</span>
+  <!-- Current Date Display -->
+  <div class="current-date-box" *ngIf="currentDate">
+    <strong>Latest Data Date:</strong> {{ currentDate }}
+  </div>
+
+  <!-- Word Count Display -->
+  <div class="wordcount-box">
+    <strong>Word Count for Selected Agency:</strong>
+    <span *ngIf="currentWordCount !== null && !calculatingWordCount">
+      {{ currentWordCount | number }}
+    </span>
     <span *ngIf="currentWordCount === null && !calculatingWordCount">Select an Agency Above</span>
     <span *ngIf="calculatingWordCount">Please be patient, calculating the word count...</span>
+  </div>
+
+  <!-- Historical Daily Changes Bar Chart -->
+  <div class="historical-daily-change-count" *ngIf="historicalChangesLoaded">
+    <canvas id="dailyChangesChart"></canvas>
+    <div class="total-changes">
+      <strong>Total Changes made for Selected Agency: </strong>
+      <span>{{ totalChanges }}</span>
+    </div>
+  </div>
+
+  <!-- Selected Date Changes -->
+  <div *ngIf="selectedDate && selectedDateChanges && selectedDateChanges.length > 0">
+    <h3>Changes on {{ selectedDate }}</h3>
+    <ul>
+      <li *ngFor="let change of selectedDateChanges">
+        {{ change }}
+      </li>
+    </ul>
   </div>
 </div>
