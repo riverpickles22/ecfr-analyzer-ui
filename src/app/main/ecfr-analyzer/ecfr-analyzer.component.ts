@@ -1,3 +1,7 @@
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+import annotationPlugin from 'chartjs-plugin-annotation';
+Chart.register(annotationPlugin);
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,9 +16,6 @@ import { EcfrWordCountService } from '@app/services/api/ecfr-wordcount/ecfr-word
 import { ECFR_ADMIN_SERVICE_TOKEN } from '@app/services/tokens/ecfr-admin.token';
 import { ECFR_HISTORICAL_CHANGE_SERVICE_TOKEN } from '@app/services/tokens/ecfr-historical_change.token';
 import { ECFR_WORDCOUNT_SERVICE_TOKEN } from '@app/services/tokens/ecfr-wordcount.token';
-// import { Chart, registerables } from 'chart.js';
-
-// Chart.register(...registerables);
 
 @Component({
   selector: 'app-ecfr-analyzer',
@@ -36,9 +37,19 @@ export class EcfrAnalyzerComponent implements OnInit {
   public dailyChanges: any[] = [];
   public totalChanges: number = 0;
   public historicalChangesLoaded = false;
+  public isChartLoading = false;
+
   public selectedDate: string = '';
   public selectedDateChanges: any[] = [];
-  // private chart: Chart | undefined;
+  private chart: Chart | undefined;
+
+  // Presidential term start dates
+  private presidentialTerms = {
+    'Obama': '2009-01-20',
+    'Trump': '2017-01-20',
+    'Biden': '2021-01-20',
+    'Trump 2': '2025-01-20' // Placeholder if he wins again
+  };
 
   constructor(
     @Inject(ECFR_ADMIN_SERVICE_TOKEN) private ecfrAdminService: EcfrAdminService,
@@ -73,6 +84,11 @@ export class EcfrAnalyzerComponent implements OnInit {
    * Called when the user selects an agency from the dropdown.
    */
   public onAgencySelected(slug: string): void {
+    if (!slug) {
+      console.warn("No agency selected.");
+      return;
+    }
+    
     this.calculatingWordCount = true;
     const agency = this.findAgencyBySlug(this.agencies, slug);
     if (!agency) {
@@ -102,78 +118,117 @@ export class EcfrAnalyzerComponent implements OnInit {
       }
     });
 
-    // Get the historical daily change count.
+    this.isChartLoading = true;
     this.ecfrHistoricalChangeService.getHistoricalChangesBySlug(slug).subscribe({
       next: (res: GetHistoricalChangesResponse) => {
-        // Assume the response contains "dailyChanges" (an array of {date, count})
-        // and "totalChanges".
+        if (!res.dailyChanges || res.dailyChanges.length === 0) {
+          console.warn("No historical changes found.");
+          this.isChartLoading = false;
+          return;
+        }
+        
         this.dailyChanges = res.dailyChanges;
         this.totalChanges = res.totalChanges;
         this.historicalChangesLoaded = true;
-        // this.renderChart();
+        this.isChartLoading = false;
+        
+        this.renderChart();
       },
       error: (err) => {
         console.error('Error fetching historical daily change count:', err);
+        this.isChartLoading = false;
       }
     });
+    
   }
 
   /**
    * Renders the bar chart using Chart.js.
    */
-  // private renderChart(): void {
-  //   // Destroy any existing chart instance
-  //   if (this.chart) {
-  //     this.chart.destroy();
-  //   }
-  //   const ctx = document.getElementById('dailyChangesChart') as HTMLCanvasElement;
-  //   this.chart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: this.dailyChanges.map(dc => dc.date),
-  //       datasets: [{
-  //         label: 'Daily Changes',
-  //         data: this.dailyChanges.map(dc => dc.count),
-  //         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-  //         borderColor: 'rgba(75, 192, 192, 1)',
-  //         borderWidth: 1
-  //       }]
-  //     },
-  //     options: {
-  //       onClick: (event: any, elements: any[]) => {
-  //         if (elements.length > 0) {
-  //           const index = elements[0].index;
-  //           const selectedDate = this.dailyChanges[index].date;
-  //           this.onDateSelected(selectedDate);
-  //         }
-  //       },
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
-  /**
-   * Called when the user clicks on a bar in the chart.
-   * It calls an API to fetch the list of changes for the selected date.
-   */
-  public onDateSelected(date: string): void {
-    this.selectedDate = date;
-    // Call your API to fetch changes for the given date.
-    // For example, assume getChangesForDate returns an Observable<any[]>:
-    // this.ecfrHistoricalChangeService.getChangesForDate(date).subscribe({
-    //   next: (changes: any[]) => {
-    //     this.selectedDateChanges = changes;
-    //   },
-    //   error: (err) => {
-    //     console.error("Error fetching changes for date", date, err);
-    //   }
-    // });
+  private renderChart(): void {
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = undefined;
+    }
+  
+    setTimeout(() => {
+      const canvas = document.getElementById('dailyChangesChart') as HTMLCanvasElement;
+      if (!canvas) {
+        console.error("Chart canvas not found!");
+        return;
+      }
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error("Canvas context is not available!");
+        return;
+      }
+  
+      // Presidential annotations
+      const annotations: any[] = [];
+      Object.entries(this.presidentialTerms).forEach(([president, date]) => {
+        const index = this.dailyChanges.findIndex(dc => dc.date === date);
+        if (index !== -1) {
+          annotations.push({
+            type: 'line',
+            mode: 'vertical',
+            scaleID: 'x',
+            value: index,
+            borderColor: 'red',
+            borderWidth: 2,
+            label: {
+              display: true,
+              content: president,
+              position: 'top',
+              backgroundColor: '#fff',
+              color: 'red',
+              font: { size: 12 }
+            }
+          });
+        }
+      });
+  
+      this.chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: this.dailyChanges.map((dc, index) =>
+            index % Math.ceil(this.dailyChanges.length / 10) === 0 ? new Date(dc.date).toLocaleDateString() : ''
+          ),
+          datasets: [{
+            label: 'Daily Changes',
+            data: this.dailyChanges.map(dc => dc.count),
+            backgroundColor: 'rgba(30, 144, 255, 0.8)',
+            borderColor: 'rgba(30, 144, 255, 1)',
+            borderWidth: 1,
+            barThickness: 12,
+            hoverBorderWidth: 0,
+            barPercentage: 0.8,
+            categoryPercentage: 0.9
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: { font: { size: 12 } },
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(200, 200, 200, 0.3)' },
+              ticks: { font: { size: 12 } }
+            }
+          },
+          plugins: {
+            legend: { labels: { font: { size: 14 } } },
+            tooltip: { mode: 'index', intersect: false },
+            annotation: { annotations }
+          }
+        }
+      });
+    }, 0);
   }
-
+  
   /**
    * Recursively searches for an agency or child agency matching the slug.
    */

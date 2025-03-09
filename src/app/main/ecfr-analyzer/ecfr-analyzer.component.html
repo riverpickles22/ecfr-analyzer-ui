@@ -1,14 +1,16 @@
 <div class="ecfr-analyzer-container">
-  <h2>eCFR Analyzer</h2>
+  <h1 class="title">📊 eCFR Analyzer</h1>
 
   <!-- Loading indicator -->
-  <div *ngIf="isLoading">Loading agencies...</div>
+  <div class="loading" *ngIf="isLoading">
+    <p>Loading agencies...</p>
+  </div>
 
-  <!-- Dropdown Menu -->
-  <div class="dropdown-container" *ngIf="!isLoading">
+  <!-- Selection Box -->
+  <div class="section">
     <label for="agencySelect" class="dropdown-label">Choose an Agency:</label>
     <select id="agencySelect" [(ngModel)]="selectedAgencySlug" (change)="onAgencySelected(selectedAgencySlug)">
-      <option value="">-- Select an Agency --</option>
+      <option value="" disabled selected>-- Select an Agency --</option>
       <ng-container *ngFor="let agency of agencies">
         <ng-container *ngIf="agency.children && agency.children.length > 0; else noChildren">
           <optgroup [label]="agency.displayName">
@@ -25,32 +27,35 @@
     </select>
   </div>
 
-  <!-- Current Date Display -->
-  <div class="current-date-box" *ngIf="currentDate">
-    <strong>Latest Data Date:</strong> {{ currentDate }}
-  </div>
-
-  <!-- Word Count Display -->
-  <div class="wordcount-box">
-    <strong>Word Count for Selected Agency:</strong>
-    <span *ngIf="currentWordCount !== null && !calculatingWordCount">
-      {{ currentWordCount | number }}
-    </span>
-    <span *ngIf="currentWordCount === null && !calculatingWordCount">Select an Agency Above</span>
-    <span *ngIf="calculatingWordCount">Please be patient, calculating the word count...</span>
-  </div>
-
-  <!-- Historical Daily Changes Bar Chart -->
-  <div class="historical-daily-change-count" *ngIf="historicalChangesLoaded">
-    <canvas id="dailyChangesChart"></canvas>
-    <div class="total-changes">
-      <strong>Total Changes made for Selected Agency: </strong>
-      <span>{{ totalChanges }}</span>
+  <!-- Data Summary Section -->
+  <div class="data-summary">
+    <div class="data-card">
+      <h3>Latest Data Date</h3>
+      <p>{{ currentDate }}</p>
+    </div>
+    <div class="data-card">
+      <h3>Word Count for Selected Agency</h3>
+      <p *ngIf="currentWordCount !== null && !calculatingWordCount">{{ currentWordCount | number }}</p>
+      <p *ngIf="currentWordCount === null && !calculatingWordCount">Select an Agency Above</p>
+      <div class="loading-text-container" *ngIf="calculatingWordCount">
+        <p class="loading-text">Calculating word count...</p>
+        <p class="loading-text-small">This may take longer for large agencies...</p> 
+      </div>
+    </div>
+    <div class="data-card">
+      <h3>Total # of Changes</h3>
+      <p>{{ totalChanges }}</p>
     </div>
   </div>
 
+  <!-- Historical Daily Changes Bar Chart -->
+  <div class="chart-section">
+    <div *ngIf="isChartLoading">Loading chart data, this may take longer for large agencies...</div>
+    <canvas *ngIf="historicalChangesLoaded && !isChartLoading" id="dailyChangesChart"></canvas>
+  </div>
+
   <!-- Selected Date Changes -->
-  <div *ngIf="selectedDate && selectedDateChanges && selectedDateChanges.length > 0">
+  <div class="section" *ngIf="selectedDate && selectedDateChanges && selectedDateChanges.length > 0">
     <h3>Changes on {{ selectedDate }}</h3>
     <ul>
       <li *ngFor="let change of selectedDateChanges">
